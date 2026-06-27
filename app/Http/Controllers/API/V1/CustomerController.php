@@ -3,66 +3,87 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Customer;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Http\Request;
+// use App\Http\Requests\StoreCustomerRequest;
+// use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CustomerResource;
+use App\Http\Resources\V1\CustomerCollection;
+use App\Services\V1\CustomerQuery;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return Customer::all();
-    }
+        /**
+        * Display a listing of the resource.
+        */
+        /* 
+        * Date: June/22/2026
+        * Name: Mydel-Ar Asturiano
+        * Note: Comment out default result
+        */
+        /*
+        public function index()
+        {
+                return new CustomerCollection(Customer::paginate());
+        }
+        */
+        public function index(Request $request)
+        {
+                $filter = new CustomerQuery();
+                $queryItems = $filter->transform($request); //[['column','operator','value']]
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+                if (count($queryItems) == 0) {
+                        return new CustomerCollection(Customer::paginate());
+                } else {
+                        return new CustomerCollection(Customer::where($queryItems)->paginate());
+                }
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCustomerRequest $request)
-    {
-        //
-    }
+        /**
+        * Show the form for creating a new resource.
+        */
+        public function create()
+        {
+                //
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Customer $customer)
-    {
-        return new CustomerResource($customer);
-    }
+        /**
+        * Store a newly created resource in storage.
+        */
+        public function store(StoreCustomerRequest $request)
+        {
+                //
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Customer $customer)
-    {
-        //
-    }
+        /**
+        * Display the specified resource.
+        */
+        public function show(Customer $customer)
+        {
+                return new CustomerResource($customer);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
-    {
-        //
-    }
+        /**
+        * Show the form for editing the specified resource.
+        */
+        public function edit(Customer $customer)
+        {
+                //
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Customer $customer)
-    {
-        //
-    }
+        /**
+        * Update the specified resource in storage.
+        */
+        public function update(UpdateCustomerRequest $request, Customer $customer)
+        {
+                //
+        }
+
+        /**
+        * Remove the specified resource from storage.
+        */
+        public function destroy(Customer $customer)
+        {
+                //
+        }
 }
