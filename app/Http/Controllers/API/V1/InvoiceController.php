@@ -3,67 +3,97 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Invoice;
-use App\Http\Requests\StoreInvoiceRequest;
-use App\Http\Requests\UpdateInvoiceRequest;
+use Illuminate\Http\Request;
+//use App\Http\Requests\StoreInvoiceRequest;
+//use App\Http\Requests\UpdateInvoiceRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Http\Resources\V1\InvoiceCollection;
+use App\Filters\V1\InvoicesFilter;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return new InvoiceCollection(Invoice::paginate());
-    }
+        /**
+        * Display a listing of the resource.
+        */
+        /* 
+        * Date: June/22/2026
+        * Name: Mydel-Ar Asturiano
+        * Note: Comment out default result
+        */
+        /*
+        public function index()
+        {
+                return new InvoiceCollection(Invoice::paginate());
+        }
+        */
+        /**
+        * Methods and Function format should be lowerCamelCase
+        * The first word is all lowercase
+        * The first letter of every subsequent word is capitalized
+        *
+        * <sampleFunctionName>
+        * 
+        * @return \Illuminate\Http\Response
+        */
+        public function index(Request $request)
+        {
+                $filter = new InvoicesFilter();
+                $queryItems = $filter->transform($request); //[['column','operator','value']]
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+                if (count($queryItems) == 0) {
+                        return new InvoiceCollection(Invoice::paginate());
+                } else {
+                        $invoices = Invoice::where($queryItems)->paginate();
+                        return new InvoiceCollection($invoices->appends($request->query()));
+                }
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreInvoiceRequest $request)
-    {
-        //
-    }
+        /**
+        * Show the form for creating a new resource.
+        */
+        public function create()
+        {
+                //
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Invoice $invoice)
-    {
-        return new InvoiceResource($invoice);
-    }
+        /**
+        * Store a newly created resource in storage.
+        */
+        public function store(StoreInvoiceRequest $request)
+        {
+                //
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
+        /**
+        * Display the specified resource.
+        */
+        public function show(Invoice $invoice)
+        {
+                return new InvoiceResource($invoice);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateInvoiceRequest $request, Invoice $invoice)
-    {
-        //
-    }
+        /**
+        * Show the form for editing the specified resource.
+        */
+        public function edit(Invoice $invoice)
+        {
+                //
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Invoice $invoice)
-    {
-        //
-    }
+        /**
+        * Update the specified resource in storage.
+        */
+        public function update(UpdateInvoiceRequest $request, Invoice $invoice)
+        {
+                //
+        }
+
+        /**
+        * Remove the specified resource from storage.
+        */
+        public function destroy(Invoice $invoice)
+        {
+                //
+        }
 }

@@ -14,7 +14,7 @@ use App\Filters\ApiFilter;
 * @author Mydel-Ar Asturiano
 * @copyright <Company Name>
 */
-class CustomersFilter extends ApiFilter
+class InvoicesFilter extends ApiFilter
 {
         /*
         |--------------------------------------------------------------------------
@@ -22,20 +22,19 @@ class CustomersFilter extends ApiFilter
         |--------------------------------------------------------------------------
         |
         | eq - Equal
-        | gt - Greater than
-        | gte - Greater than equal
         | lt - Less than
         | lte - Less than equal
+        | gt - Greater than
+        | gte - Greater than equal
+        | ne - Not equal
         */
 
         protected $safeParms = [
-                'name' => ['eq'],
-                'type' => ['eq'],
-                'email' => ['eq'],
-                'address' => ['eq'],
-                'city' => ['eq'],
-                'state' => ['eq'],
-                'postalCode' => ['eq','gt','lt']
+                'customer_id' => ['eq'],
+                'amount' => ['eq','lt','lte','gt','gte'],
+                'status' => ['eq','ne'],
+                'billed_dated' => ['eq','lt','lte','gt','gte'],
+                'paid_dated' => ['eq','lt','lte','gt','gte']
         ];
 
         protected $columnMap = [
@@ -47,6 +46,7 @@ class CustomersFilter extends ApiFilter
                 'lt' => '<',
                 'lte' => '<=',
                 'gt' => '>',
-                'gte' => '>='
+                'gte' => '>=',
+                'ne' => '!='
         ];
 }

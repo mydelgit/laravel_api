@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CustomerResource;
 use App\Http\Resources\V1\CustomerCollection;
-use App\Services\V1\CustomerQuery;
+use App\Filters\V1\CustomersFilter;
 
 class CustomerController extends Controller
 {
@@ -27,15 +27,25 @@ class CustomerController extends Controller
                 return new CustomerCollection(Customer::paginate());
         }
         */
+        /**
+        * Methods and Function format should be lowerCamelCase
+        * The first word is all lowercase
+        * The first letter of every subsequent word is capitalized
+        *
+        * <sampleFunctionName>
+        * 
+        * @return \Illuminate\Http\Response
+        */
         public function index(Request $request)
         {
-                $filter = new CustomerQuery();
+                $filter = new CustomersFilter();
                 $queryItems = $filter->transform($request); //[['column','operator','value']]
 
                 if (count($queryItems) == 0) {
                         return new CustomerCollection(Customer::paginate());
                 } else {
-                        return new CustomerCollection(Customer::where($queryItems)->paginate());
+                        $invoices = Customer::where($queryItems)->paginate();
+                        return new CustomerCollection($invoices->appends($request->query()));
                 }
         }
 
